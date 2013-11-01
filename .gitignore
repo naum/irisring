@@ -1,0 +1,6 @@
+*.swp
+*.map
+*.deps
+*.log
+packages
+pubspec.lock
