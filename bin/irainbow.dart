@@ -9,15 +9,26 @@ var RE_SP = new RegExp('\{SP\}');
 var MAXPOSTNUM = 300;
 var STARTPOSTNUM = 0;
 var TUMTAGTAB = {};
-var TURL = 'http://azspot.net/api/read/json/?num=50&start={SP}';
+var TURL = 'http://{TUMBLR_URL}/api/read/json/?num=50&start={SP}';
 
-main() {
-  for (var n = 0; n < MAXPOSTNUM; n += 50) {
-    var du = new Duration(seconds: ((n ~/ 50) * 10));
-    new Timer(du, () { 
-        var tu = TURL.replaceAll(RE_SP, '${n}');
-        grabWebContent(tu, showPageContent);
-    });
+main(arg) {
+  if (arg.length > 0) {
+    var tu = arg[0];
+    for (var n = 0; n < MAXPOSTNUM; n += 50) {
+      var du = new Duration(seconds: ((n ~/ 50) * 5));
+      new Timer(du, () { 
+          var tb = { 'TUMBLR_URL': tu, 'SP': n };
+          var desiredUrl = mold(TURL, tb);
+          print('Fetching ${desiredUrl}...');
+          grabWebContent(desiredUrl, showPageContent);
+      });
+    }
+    new Timer(
+      new Duration(seconds: (MAXPOSTNUM ~/ 50) * 5),
+      showTagTab
+    );
+  } else {
+    print('Usage: irisring.dart url');
   }
 }
  
@@ -42,11 +53,36 @@ makeTumblrMap(str) {
   return JSON.decode(tjs);
 }
 
+String mold(String t, Map b) {
+  var reTS = new RegExp(r'\{(\w+)\}');
+  var sout = t.replaceAllMapped(reTS, (m) {
+    var s = m.group(1);
+    return (b.containsKey(s)) ? b[s] : '';
+  });
+  return sout;
+}
+
 showPageContent(bc) {
   var tpc = makeTumblrMap(bc);
   for (var p in tpc['posts']) {
     if (p.containsKey('tags')) {
       print("${p['id']} ${p['tags']}");
+      tallyTags(p['tags']);
+    }
+  }
+}
+
+showTagTab() {
+  print('----');
+  print(TUMTAGTAB);
+}
+
+tallyTags(List tl) {
+  for (var t in tl) {
+    if (TUMTAGTAB.containsKey(t)) {
+      TUMTAGTAB[t] += 1;
+    } else {
+      TUMTAGTAB[t] = 1;
     }
   }
 }
