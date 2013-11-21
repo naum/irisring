@@ -6,9 +6,9 @@ import 'dart:io';
 
 var HC = new HttpClient();
 var RE_SP = new RegExp('\{SP\}');
-var MAXPOSTNUM = 1000;
+var MAXPOSTNUM = 3000;
 var STARTPOSTNUM = 0;
-var TAGCLOUDMAX = 100;
+var TAGCLOUDMAX = 120;
 var TUMBLOG = '';
 var TUMTAGTAB = {};
 var TURL = 'http://{TUMBLR_URL}/api/read/json/?num=50&start={SP}';
