@@ -6,18 +6,20 @@ import 'dart:io';
 
 var HC = new HttpClient();
 var RE_SP = new RegExp('\{SP\}');
-var MAXPOSTNUM = 300;
+var MAXPOSTNUM = 1000;
 var STARTPOSTNUM = 0;
+var TAGCLOUDMAX = 100;
+var TUMBLOG = '';
 var TUMTAGTAB = {};
 var TURL = 'http://{TUMBLR_URL}/api/read/json/?num=50&start={SP}';
 
 main(arg) {
   if (arg.length > 0) {
-    var tu = arg[0];
+    TUMBLOG = arg[0];
     for (var n = 0; n < MAXPOSTNUM; n += 50) {
       var du = new Duration(seconds: ((n ~/ 50) * 5));
       new Timer(du, () { 
-          var tb = { 'TUMBLR_URL': tu, 'SP': n };
+          var tb = { 'TUMBLR_URL': TUMBLOG, 'SP': n };
           var desiredUrl = mold(TURL, tb);
           print('Fetching ${desiredUrl}...');
           grabWebContent(desiredUrl, showPageContent);
@@ -30,6 +32,10 @@ main(arg) {
   } else {
     print('Usage: irisring.dart url');
   }
+}
+
+byTagTally(a, b) {
+  return TUMTAGTAB[b] - TUMTAGTAB[a];
 }
  
 grabWebContent(u, f) {
@@ -75,6 +81,21 @@ showPageContent(bc) {
 showTagTab() {
   print('----');
   print(TUMTAGTAB);
+  print('----');
+  var stl = TUMTAGTAB.keys.toList();
+  stl.sort(byTagTally);
+  for (var t in stl) {
+    print('$t: ${TUMTAGTAB[t]}');
+  }
+  print('----');
+  if (stl.length > TAGCLOUDMAX) {
+    stl = stl.sublist(0, TAGCLOUDMAX);
+  }
+  stl.sort();
+  for (var t in stl) {
+    var enct = Uri.encodeQueryComponent(t);
+    print('<li><a href="http://${TUMBLOG}/tagged/${enct}">$t</a></li>');
+  }
 }
 
 tallyTags(List tl) {
