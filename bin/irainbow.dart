@@ -8,7 +8,7 @@ var HC = new HttpClient();
 var RE_SP = new RegExp('\{SP\}');
 var MAXPOSTNUM = 3000;
 var STARTPOSTNUM = 0;
-var TAGCLOUDMAX = 120;
+var TAGCLOUDMAX = 150;
 var TUMBLOG = '';
 var TUMTAGTAB = {};
 var TURL = 'http://{TUMBLR_URL}/api/read/json/?num=50&start={SP}';
