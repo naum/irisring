@@ -1,0 +1,4 @@
+name: irisring
+description: Tumblr utilities
+dependencies:
+  browser: any
