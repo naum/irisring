@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 var HC = new HttpClient();
-var MAXPOSTNUM = 3000;
+var MAXPOSTNUM = 1000;
 var STARTPOSTNUM = 0;
 var TAGCLOUDMAX = 150;
 var TUMBLOG = '';
