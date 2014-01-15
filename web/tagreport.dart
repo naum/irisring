@@ -13,8 +13,12 @@ main() {
 }
 
 fetchTagData(e) {
-  tumblrTagReport.innerHtml = 'You entered <em>${tumblrBlog.value}</em>';
-  ScriptElement script = new Element.tag('script');
-  script.src = 'http://${tumblrBlog.value}/api/read/json/?callback=processTumblrData';
-  document.body.children.add(script);
+  try {
+    tumblrTagReport.innerHtml = 'You entered <em>${tumblrBlog.value}</em>';
+    ScriptElement script = new Element.tag('script');
+    script.src = 'http://${tumblrBlog.value}/api/read/json/?callback=processTumblrData';
+    document.body.children.add(script);
+  } catch (e) {
+    tumblrTagReport.innerHtml = '<div class="error">error fetching tumblr data</div>';
+  }
 }
