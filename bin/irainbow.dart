@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:io';
 
 var HC = new HttpClient();
-var RE_SP = new RegExp('\{SP\}');
 var MAXPOSTNUM = 3000;
 var STARTPOSTNUM = 0;
 var TAGCLOUDMAX = 150;
