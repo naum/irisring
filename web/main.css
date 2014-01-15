@@ -11,9 +11,15 @@ body {
   background: #f2f9f6;
   color: #0c1310;
   font-family: "Gill Sans", sans-serif;
+  font-size: 100%;
+  line-height: 1.333em;
 }
 
 #pagewrapper {
   width: 30em;
   margin: 2em auto;  
+}
+
+.formblock {
+  margin: 1.333em auto;
 }
