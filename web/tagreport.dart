@@ -6,19 +6,36 @@ var tumblrFetch = querySelector('#tumblr_fetch');
 var tumblrTagReport = querySelector('#tumblr_tagreport');
 
 main() {
-  context['processTumblrData'] = (resp) {
+  context['primeTumblrPursuit'] = (resp) {
     tumblrTagReport.innerHtml = resp['tumblelog']['description'];
+    fetchTagData();
   };
-  tumblrFetch.onClick.listen(fetchTagData);
+  context['processTumblrData'] = (resp) {
+    tumblrTagReport.innerHtml = generateTagReport(resp);
+  };
+  tumblrFetch.onClick.listen(launchTumblrFetch);
 }
 
-fetchTagData(e) {
-  try {
-    tumblrTagReport.innerHtml = 'You entered <em>${tumblrBlog.value}</em>';
-    ScriptElement script = new Element.tag('script');
-    script.src = 'http://${tumblrBlog.value}/api/read/json/?callback=processTumblrData';
-    document.body.children.add(script);
-  } catch (e) {
-    tumblrTagReport.innerHtml = '<div class="error">error fetching tumblr data</div>';
+fetchTagData() {
+  tumblrTagReport.innerHtml = 'Fetching <em>${tumblrBlog.value}</em> tag data...';
+  ScriptElement script = new Element.tag('script');
+  script.src = 'http://${tumblrBlog.value}/api/read/json/?num=50&callback=processTumblrData';
+  document.body.children.add(script);
+}
+
+String generateTagReport(td) {
+  var sb = new StringBuffer();
+  for (var p in td['posts']) {
+    if (p.hasProperty('tags')) {
+      sb.write("${p['id']} ${p['tags']}<br>");
+    }
   }
+  return sb.toString();
+}
+
+launchTumblrFetch(e) {
+  tumblrTagReport.innerHtml = 'Preparing launch...';
+  ScriptElement script = new Element.tag('script');
+  script.src = 'http://${tumblrBlog.value}/api/read/json/?callback=primeTumblrPursuit';
+  document.body.children.add(script);
 }
