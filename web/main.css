@@ -1,0 +1,19 @@
+
+a:link, a:visited {
+  color: #75c0a2;
+}
+
+a:hover, a:active {
+  color: #58907a;
+}
+
+body {
+  background: #f2f9f6;
+  color: #0c1310;
+  font-family: "Gill Sans", sans-serif;
+}
+
+#pagewrapper {
+  width: 30em;
+  margin: 2em auto;  
+}
