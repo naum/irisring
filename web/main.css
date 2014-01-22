@@ -15,9 +15,26 @@ body {
   line-height: 1.333em;
 }
 
+td {
+  padding: 0.25em 0.75em;
+}
+
 #pagewrapper {
   width: 30em;
   margin: 2em auto;  
+}
+
+#tumblr_console {
+  font-family: monospace;
+  font-size: 0.75em;
+}
+
+.celnum {
+  text-align: right;
+}
+
+.celtex {
+  text-align: left;
 }
 
 .formblock {
