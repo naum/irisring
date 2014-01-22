@@ -16,7 +16,15 @@ body {
 }
 
 td {
-  padding: 0.25em 0.75em;
+  padding: 0.166em 0.666em;
+}
+
+td:first {
+  padding-left: 0;
+}
+
+td:last {
+  padding-right: 0;
 }
 
 #pagewrapper {
