@@ -18,6 +18,7 @@ main() {
   };
   context['processTumblrData'] = (resp) {
     tallyTags(resp);
+    tumblrInfo.innerHtml = '';
     tumblrTagReport.innerHtml = generateTagReport(resp);
   };
   tumblrFetch.onClick.listen(launchTumblrFetch);
