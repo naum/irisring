@@ -23,11 +23,20 @@ main() {
   tumblrFetch.onClick.listen(launchTumblrFetch);
 }
 
-fetchTagData() {
-  tumblrTagReport.innerHtml = 'Fetching <em>${tumblrBlog.value}</em> tag data...';
-  ScriptElement script = new Element.tag('script');
-  script.src = 'http://${tumblrBlog.value}/api/read/json/?num=50&callback=processTumblrData';
+affixExternalScriptJson(String s) {
+  var script = new Element.tag('script');
+  script.src = s;
   document.body.children.add(script);
+}
+
+fetchTagData() {
+  var start = 0.toString();
+  var s = 1.toString();
+  var e = 50.toString();
+  var tb = tumblrBlog.value;
+  var src = 'http://${tb}/api/read/json/?num=50&start=${start}&callback=processTumblrData';
+  tumblrInfo.innerHtml = 'Fetching posts ${s}-${e} of ${tumblrTotalPosts}!';
+  affixExternalScriptJson(src);
 }
 
 String generateTagReport(td) {
@@ -43,10 +52,9 @@ String generateTagReport(td) {
 launchTumblrFetch(e) {
   tagFreqTable.clear();
   tumblrConsole.innerHtml = '';
-  tumblrTagReport.innerHtml = 'Preparing launch...';
-  ScriptElement script = new Element.tag('script');
-  script.src = 'http://${tumblrBlog.value}/api/read/json/?callback=primeTumblrPursuit';
-  document.body.children.add(script);
+  tumblrInfo.innerHtml = 'Preparing launch...';
+  var src = 'http://${tumblrBlog.value}/api/read/json/?callback=primeTumblrPursuit';
+  affixExternalScriptJson(src);
 }
 
 tallyTags(td) {
