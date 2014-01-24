@@ -1,5 +1,7 @@
+import 'dart:async' show Timer;
 import 'dart:html';
 import 'dart:js';
+import 'dart:math' show min;
 
 var tagFreqTable = {};
 var tumblrBlog = querySelector('#tumblr_blog');
@@ -31,13 +33,16 @@ affixExternalScriptJson(String s) {
 }
 
 fetchTagData() {
-  var start = 0.toString();
-  var s = 1.toString();
-  var e = 50.toString();
   var tb = tumblrBlog.value;
-  var src = 'http://${tb}/api/read/json/?num=50&start=${start}&callback=processTumblrData';
-  tumblrInfo.innerHtml = 'Fetching posts ${s}-${e} of ${tumblrTotalPosts}!';
-  affixExternalScriptJson(src);
+  var endPost = min(int.parse(tumblrTotalPosts), 300);
+  for (var n = 0; n < endPost; n += 50) {
+    var du = new Duration(seconds: (n ~/ 50) * 6);
+    new Timer(du, () {
+      var src = 'http://${tb}/api/read/json/?num=50&start=${n}&callback=processTumblrData';
+      tumblrInfo.innerHtml = 'Fetching posts starting at ${n} of ${tumblrTotalPosts}!';
+      affixExternalScriptJson(src);
+    });
+  }
 }
 
 String generateTagReport(td) {
