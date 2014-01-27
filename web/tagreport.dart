@@ -34,7 +34,7 @@ affixExternalScriptJson(String s) {
 
 fetchTagData() {
   var tb = tumblrBlog.value;
-  var endPost = min(int.parse(tumblrTotalPosts), 300);
+  var endPost = min(int.parse(tumblrTotalPosts), 1000);
   for (var n = 0; n < endPost; n += 50) {
     var du = new Duration(seconds: (n ~/ 50) * 6);
     new Timer(du, () {
