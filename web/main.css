@@ -1,18 +1,26 @@
+/* BASE COLORS = 8E0028, 000000, EFE1C6 */
+
 
 a:link, a:visited {
-  color: #75c0a2;
+  color: #8E0028;
 }
 
 a:hover, a:active {
-  color: #58907a;
+  color: #8E0028;
 }
 
 body {
-  background: #f2f9f6;
-  color: #0c1310;
+  background: #EFE1C6;
+  color: #000000;
   font-family: "Gill Sans", sans-serif;
   font-size: 100%;
   line-height: 1.333em;
+}
+
+table {
+  border-collapse: collapse;
+  border: thin solid: #000000;
+  margin-top: 1.333em;
 }
 
 td {
@@ -25,6 +33,16 @@ td:first {
 
 td:last {
   padding-right: 0;
+}
+
+tr {
+  border-bottom: thin solid #000000;
+}
+
+tr.rowhead {
+  border-top: medium solid #000000;
+  border-bottom: medium solid #000000;
+  font-weight: bold;
 }
 
 #pagewrapper {
@@ -48,3 +66,4 @@ td:last {
 .formblock {
   margin: 1.333em auto;
 }
+
