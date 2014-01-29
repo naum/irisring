@@ -3,16 +3,27 @@
 <html>
   <head>
     <link rel="stylesheet" href="main.css">
-    <title>tumblr tag report</title>
+    <title>TUMBLR TAG REPORT</title>
   </head>
  
   <body>
     <div id="pagewrapper">   
-      <h1>tumblr tag report</h1>
+      <h1>TUMBLR TAG REPORT</h1>
       <div class="formblock">
         <label>http://</label>
         <input type="text" size="40" id="tumblr_blog">
-        <button id="tumblr_fetch">fetch</button>
+        <button id="tumblr_fetch">FETCH</button>
+        <select id="tumblr_max_post_fetch">
+          <option>50</option>
+          <option>100</option>
+          <option selected="selected">200</option>
+          <option>500</option>
+          <option>1000</option>
+          <option>2000</option>
+          <option>5000</option>
+          <option>10000</option>
+          <option>ALL</option>
+        </select>
       </div>
       <div id="tumblr_info"></div>
       <div id="tumblr_tagreport"></div>

@@ -1,10 +1,24 @@
+/**
+ * 
+ * Generate a Tumblr Tag Report for a Tumblr blog
+ * 
+ * TODO: add "ABORT" button, enable/disable "FETCH" button in midst of 
+ *   processing
+ * TODO: retain [tumblrBlog.value] in lieu of inadvertent input field fiddling
+ * TODO: scrub [tumblrBlog.value] - remove trailing slash, "http(s)?//" prefix, etc.
+ * 
+ */
+
 import 'dart:async' show Timer;
 import 'dart:html';
 import 'dart:js';
 import 'dart:math' show min;
 
-const MAX_POST_FETCH = 1000;
+class NullTreeSanitizer implements NodeTreeSanitizer {
+  void sanitizeTree(Node node) {}
+}
 
+var maxPostFetch;
 var tagFreqTable = {};
 var tagStatTable = {
   'POST_COUNT': 0,
@@ -29,7 +43,10 @@ main() {
   context['processTumblrData'] = (resp) {
     tallyTags(resp);
     tumblrInfo.innerHtml = formatTagStatInfo();
-    tumblrTagReport.innerHtml = generateTagReport(resp);
+    tumblrTagReport.setInnerHtml(
+      generateTagReport(resp), 
+      treeSanitizer: new NullTreeSanitizer()
+    );
   };
   tumblrFetch.onClick.listen(launchTumblrFetch);
 }
@@ -51,8 +68,13 @@ clearStatTable() {
 }
 
 fetchTagData() {
+  var endPost;
   var tb = tumblrBlog.value;
-  var endPost = min(int.parse(tumblrTotalPosts), MAX_POST_FETCH);
+  if (maxPostFetch == 'ALL') {
+    endPost = int.parse(tumblrTotalPosts); 
+  } else {
+    endPost = min(int.parse(tumblrTotalPosts), int.parse(maxPostFetch)); 
+  }
   for (var n = 0; n < endPost; n += 50) {
     var du = new Duration(seconds: (n ~/ 50) * 6);
     new Timer(du, () {
@@ -70,6 +92,16 @@ String formatTagStatInfo() {
   return '${tp} TOTAL POSTS, ${percentTagged}% TAGGED, ${tagsPerPost} TAGS PER POST';
 }
 
+String formatBlogTagLink(tn, tally) {
+  var etn = Uri.encodeQueryComponent(tn);
+  return '<a href="http://${tumblrBlog.value}/tagged/${etn}">${tally}</a>';
+}
+
+String formatTumblrTagLink(tn) {
+  var etn = Uri.encodeQueryComponent(tn);
+  return '<a href="http://tumblr.com/tagged/${etn}">${tn}</a>';
+}
+
 String generateTagReport(td) {
   var sb = new StringBuffer();
   sb.write('<table>');
@@ -77,8 +109,9 @@ String generateTagReport(td) {
   var stl = tagFreqTable.keys.toList();
   stl.sort(byTally);
   for (var tn in stl) {
-    var tt = tagFreqTable[tn];
-    sb.write('<tr><td class="celtex">${tn}<td class="celnum">${tt}</tr>');
+    var ltn = formatTumblrTagLink(tn);
+    var ltt = formatBlogTagLink(tn, tagFreqTable[tn]);
+    sb.write('<tr><td class="celtex">${ltn}<td class="celnum">${ltt}</tr>');
   }
   sb.write('</table>');
   return sb.toString();
@@ -87,6 +120,8 @@ String generateTagReport(td) {
 launchTumblrFetch(e) {
   clearStatTable();
   tagFreqTable.clear();
+  var tumblrMaxPostFetch = querySelector('#tumblr_max_post_fetch');
+  maxPostFetch = tumblrMaxPostFetch.value;
   tumblrConsole.innerHtml = '';
   tumblrInfo.innerHtml = 'Preparing launch...';
   var src = 'http://${tumblrBlog.value}/api/read/json/?callback=primeTumblrPursuit';

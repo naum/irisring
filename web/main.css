@@ -1,12 +1,16 @@
 /* BASE COLORS = 8E0028, 000000, EFE1C6 */
 
+a {
+  text-decoration: none;
+}
 
 a:link, a:visited {
   color: #8E0028;
 }
 
 a:hover, a:active {
-  color: #8E0028;
+  background: #8E0028;
+  color: #EFE1C6;
 }
 
 body {
