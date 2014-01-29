@@ -6,6 +6,8 @@
  *   processing
  * TODO: retain [tumblrBlog.value] in lieu of inadvertent input field fiddling
  * TODO: scrub [tumblrBlog.value] - remove trailing slash, "http(s)?//" prefix, etc.
+ * TODO: remove fetched JSON "scripts" after they are processed
+ * TODO: generate tag cloud HTML for clip and paste
  * 
  */
 
