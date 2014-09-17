@@ -13,9 +13,13 @@ var TUMTAGTAB = {};
 var TURL = 'http://{TUMBLR_URL}/api/read/json/?num=50&start={SP}';
 
 main(arg) {
+  var maxpost = MAXPOSTNUM;
   if (arg.length > 0) {
     TUMBLOG = arg[0];
-    for (var n = 0; n < MAXPOSTNUM; n += 50) {
+    if (arg.length > 1) {
+      maxpost = int.parse(arg[1]);
+    }
+    for (var n = 0; n < maxpost; n += 50) {
       var du = new Duration(seconds: ((n ~/ 50) * 5));
       new Timer(du, () { 
           var tb = { 'TUMBLR_URL': TUMBLOG, 'SP': n };
@@ -25,7 +29,7 @@ main(arg) {
       });
     }
     new Timer(
-      new Duration(seconds: (MAXPOSTNUM ~/ 50) * 5),
+      new Duration(seconds: (maxpost ~/ 50) * 5),
       showTagTab
     );
   } else {
